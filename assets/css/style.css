@@ -590,6 +590,13 @@ footer {
     margin-bottom: 0.5rem;
 }
 
+.popup-title .target-symbol {
+    font-size: 1.8rem;
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 0.3rem;
+}
+
 .popup-text {
     margin-bottom: 1.5rem;
 }
