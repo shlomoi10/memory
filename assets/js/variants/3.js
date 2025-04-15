@@ -59,6 +59,7 @@ class TripleMemoryGame extends BaseMemoryGame {
         
         // מידע על הזוג האחרון שנמצא
         this.lastMatchedGroup = null;
+        this.lastMatchedSymbol = null;
         
         // פופאפ ניחוש הקלף השלישי
         this.popupOverlay = document.getElementById('third-card-popup');
@@ -69,6 +70,12 @@ class TripleMemoryGame extends BaseMemoryGame {
         
         // אתחול המשחק
         this.resetGame();
+        
+        // קלפים שנמצאו כזוג זמני (לא מסומנים כמתאימים עדיין)
+        this.tempMatchedCards = [];
+        
+        // קבוצות שנבחרו למשחק
+        this.gameGroups = [];
     }
     
     /**
@@ -78,35 +85,30 @@ class TripleMemoryGame extends BaseMemoryGame {
         const size = this.boardSize[this.difficulty];
         const totalCards = size * size;
         
-        // חישוב מספר הקבוצות (כל קבוצה מכילה 3 קלפים זהים)
-        const groupsCount = Math.floor(totalCards / 3);
+        // מספר הזוגות הוא מחצית ממספר הקלפים
+        const pairsCount = totalCards / 2;
         
-        // בחירת קבוצות אקראיות לפי מספר הקבוצות הנדרש
-        const selectedGroups = this.shuffleArray(this.cardData).slice(0, groupsCount);
+        // ערבוב מערך הקלפים המקורי לפני בחירת הקלפים
+        const shuffledCardData = this.shuffleArray([...this.cardData]);
         
-        // יצירת מערך של קלפים (3 קלפים מכל קבוצה)
+        // בחירת קבוצות אקראיות לפי מספר הזוגות הנדרש
+        // ניקח רק pairsCount קבוצות כדי שלא יהיו כפילויות
+        const selectedGroups = shuffledCardData.slice(0, pairsCount);
+        
+        // שמירת הקבוצות שנבחרו למשחק (נשתמש בהן גם בפופאפ)
+        this.gameGroups = [...selectedGroups];
+        
+        // יצירת מערך של זוגות (כל קבוצה מופיעה פעמיים)
         let cardValues = [];
         selectedGroups.forEach(card => {
-            // יצירת 3 קלפים זהים מכל קבוצה
-            for (let i = 0; i < 3; i++) {
+            // יצירת 2 קלפים זהים מכל קבוצה
+            for (let i = 0; i < 2; i++) {
                 cardValues.push({ ...card });
             }
         });
         
-        // אם יש מקום לעוד קלפים (כי totalCards לא מתחלק ב-3)
-        const remainingSlots = totalCards - cardValues.length;
-        if (remainingSlots > 0) {
-            // בחירת קבוצה נוספת
-            const extraGroup = this.cardData.find(card => !selectedGroups.includes(card));
-            
-            // הוספת קלפים מהקבוצה הנוספת כדי למלא את הלוח
-            for (let i = 0; i < remainingSlots; i++) {
-                cardValues.push({ ...extraGroup });
-            }
-        }
-        
-        // ערבוב הקלפים
-        cardValues = this.shuffleArray(cardValues);
+        // ערבוב הקלפים באמצעות אלגוריתם Fisher-Yates משופר
+        cardValues = this.betterShuffle(cardValues);
         
         // שמירת מערך הקלפים המקורי לשימוש בפופאפ
         this.originalCardValues = [...cardValues];
@@ -148,19 +150,25 @@ class TripleMemoryGame extends BaseMemoryGame {
      * יצירת מערך קבוצות ייחודיות לפופאפ
      */
     createUniquePopupGroups() {
-        // איסוף כל הקבוצות הייחודיות מהלוח
-        const uniqueGroups = [];
-        const groupsMap = new Map();
+        // השתמש בקבוצות שנבחרו למשחק
+        const uniqueGroups = [...this.gameGroups];
         
-        this.originalCardValues.forEach(card => {
-            if (!groupsMap.has(card.group)) {
-                groupsMap.set(card.group, card);
-                uniqueGroups.push({ ...card });
-            }
-        });
+        // ערבוב הקבוצות הייחודיות באמצעות אלגוריתם Fisher-Yates משופר
+        this.popupUniqueGroups = this.betterShuffle(uniqueGroups);
         
-        // ערבוב הקבוצות הייחודיות
-        this.popupUniqueGroups = this.shuffleArray(uniqueGroups);
+        console.log(`מספר הקלפים בפופאפ: ${this.popupUniqueGroups.length}`);
+    }
+    
+    /**
+     * ערבוב מערך באמצעות אלגוריתם Fisher-Yates משופר
+     */
+    betterShuffle(array) {
+        const newArray = [...array]; // יצירת עותק של המערך המקורי
+        for (let i = newArray.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+        }
+        return newArray;
     }
     
     /**
@@ -172,16 +180,18 @@ class TripleMemoryGame extends BaseMemoryGame {
         const cardData2 = JSON.parse(card2.dataset.value);
         
         if (cardData1.group === cardData2.group) {
-            // התאמה נמצאה - סימון הקלפים כמתאימים
-            this.markAsMatched();
-            
             // שמירת הקבוצה של הזוג שנמצא
             this.lastMatchedGroup = cardData1.group;
+            this.lastMatchedSymbol = cardData1.symbol;
             
-            // הצגת פופאפ לניחוש הקלף השלישי
+            // שמירת הקלפים שנמצאו כזוג זמני (לא מסומנים כמתאימים עדיין)
+            this.tempMatchedCards = [...this.flippedCards];
+            this.flippedCards = [];
+            
+            // הצגת פופאפ לניחוש הקלף השלישי אחרי השהייה קצרה
             setTimeout(() => {
                 this.showThirdCardPopup();
-            }, 500);
+            }, 1000);
             
             // השחקן הנוכחי ממשיך לשחק (לא מחליפים תור)
             this.turnChanged = false;
@@ -198,6 +208,24 @@ class TripleMemoryGame extends BaseMemoryGame {
     }
     
     /**
+     * סימון זוג קלפים כמתאימים (שונה ממחלקת הבסיס כדי להשאיר אותם מוצגים)
+     */
+    markCardsAsMatched() {
+        this.flippedCards.forEach(card => {
+            card.classList.add('matched');
+            
+            // הסרת מאזין האירועים מהקלף
+            card.style.pointerEvents = 'none';
+        });
+        
+        this.matchedPairs++;
+        this.flippedCards = [];
+        
+        // בדיקה האם המשחק הסתיים
+        this.checkGameCompletion();
+    }
+    
+    /**
      * הצגת פופאפ לניחוש הקלף השלישי
      */
     showThirdCardPopup() {
@@ -205,6 +233,19 @@ class TripleMemoryGame extends BaseMemoryGame {
         while (this.popupBoard.firstChild) {
             this.popupBoard.removeChild(this.popupBoard.firstChild);
         }
+        
+        // עדכון כותרת הפופאפ עם האימוג'י שצריך למצוא
+        const popupTitle = this.popupOverlay.querySelector('.popup-title');
+        popupTitle.innerHTML = `מצא את <span class="target-symbol">${this.lastMatchedSymbol}</span>`;
+        
+        // עדכון הטקסט המסביר
+        const popupText = this.popupOverlay.querySelector('.popup-text');
+        popupText.textContent = 'נחש היכן נמצא הקלף השלישי';
+        
+        // הסרת תוצאה קודמת אם קיימת
+        const popupContent = this.popupOverlay.querySelector('.popup-content');
+        const existingResult = popupContent.querySelector('.popup-result');
+        if (existingResult) popupContent.removeChild(existingResult);
         
         // הגדרת גריד לפי מספר הקבוצות הייחודיות
         const gridSize = Math.ceil(Math.sqrt(this.popupUniqueGroups.length));
@@ -263,6 +304,13 @@ class TripleMemoryGame extends BaseMemoryGame {
             const currentPlayer = this.players[this.currentPlayerIndex];
             currentPlayer.score++;
             this.updatePlayerScore(currentPlayer);
+            
+            // סימון הקלפים הזמניים כמתאימים
+            this.tempMatchedCards.forEach(card => {
+                card.classList.add('matched');
+                card.style.pointerEvents = 'none';
+            });
+            this.matchedPairs++;
         } else {
             resultElement.textContent = 'ניחוש שגוי!';
         }
@@ -274,19 +322,28 @@ class TripleMemoryGame extends BaseMemoryGame {
         const existingResult = popupContent.querySelector('.popup-result');
         if (existingResult) popupContent.removeChild(existingResult);
         
-        // הסרת כפתור קודם אם קיים
-        const existingButton = popupContent.querySelector('.popup-continue-btn');
-        if (existingButton) popupContent.removeChild(existingButton);
-        
         popupContent.appendChild(resultElement);
         
         // סגירת הפופאפ אוטומטית אחרי השהייה קצרה
         setTimeout(() => {
             this.hideThirdCardPopup();
             
-            // אם הניחוש היה שגוי, החלפת תור
+            // אם הניחוש היה שגוי, החזרת הקלפים והחלפת תור
             if (!isCorrect) {
+                // החזרת הקלפים הזמניים למצב מכוסה
+                this.tempMatchedCards.forEach(card => {
+                    card.classList.remove('flipped');
+                });
+                this.tempMatchedCards = [];
+                
+                // החלפת תור לשחקן הבא
                 this.switchPlayer();
+            } else {
+                // ניקוי מערך הקלפים הזמניים
+                this.tempMatchedCards = [];
+                
+                // בדיקה האם המשחק הסתיים
+                this.checkGameCompletion();
             }
         }, 1500); // השהייה של 1.5 שניות כדי לאפשר לשחקן לראות את התוצאה
     }
@@ -296,6 +353,11 @@ class TripleMemoryGame extends BaseMemoryGame {
      */
     hideThirdCardPopup() {
         this.popupOverlay.classList.remove('visible');
+        
+        // הסרת תוצאת הניחוש מהפופאפ
+        const popupContent = this.popupOverlay.querySelector('.popup-content');
+        const existingResult = popupContent.querySelector('.popup-result');
+        if (existingResult) popupContent.removeChild(existingResult);
         
         // בדיקה האם המשחק הסתיים
         this.checkGameCompletion();
@@ -389,6 +451,13 @@ class TripleMemoryGame extends BaseMemoryGame {
         
         // איפוס הקבוצה האחרונה שהותאמה
         this.lastMatchedGroup = null;
+        this.lastMatchedSymbol = null;
+        
+        // איפוס קלפים זמניים
+        this.tempMatchedCards = [];
+        
+        // איפוס קבוצות המשחק
+        this.gameGroups = [];
     }
 }
 

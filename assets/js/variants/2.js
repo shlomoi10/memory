@@ -68,8 +68,12 @@ class NumberMemoryGame extends BaseMemoryGame {
         const totalCards = size * size;
         const pairsCount = totalCards / 2;
         
+        // ערבוב מערך הקלפים המקורי לפני בחירת הקלפים
+        const shuffledCardData = this.shuffleArray([...this.cardData]);
+        
         // בחירת נתוני קלפים אקראיים לפי מספר הזוגות הנדרש
-        const selectedCardData = this.shuffleArray(this.cardData).slice(0, pairsCount);
+        // נוודא שלוקחים רק את ה-pairsCount הראשונים כדי שלא יהיו כפילויות
+        const selectedCardData = shuffledCardData.slice(0, pairsCount);
         
         // יצירת מערך של זוגות
         let cardValues = [];
@@ -78,8 +82,8 @@ class NumberMemoryGame extends BaseMemoryGame {
             cardValues.push({ ...card });
         });
         
-        // ערבוב הקלפים
-        cardValues = this.shuffleArray(cardValues);
+        // ערבוב הקלפים באמצעות אלגוריתם Fisher-Yates משופר
+        cardValues = this.betterShuffle(cardValues);
         
         // הגדרת גריד לפי גודל הלוח
         this.boardElement.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
@@ -230,6 +234,17 @@ class NumberMemoryGame extends BaseMemoryGame {
         this.currentPlayerIndex = 0;
         this.updateCurrentPlayer();
         this.turnChanged = false;
+    }
+    
+    /**
+     * ערבוב מערך באמצעות אלגוריתם Fisher-Yates משופר
+     */
+    betterShuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
     }
 }
 
