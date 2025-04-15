@@ -1,0 +1,530 @@
+:root {
+    --primary-color: #4a6baf;
+    --secondary-color: #f39c12;
+    --accent-color: #e74c3c;
+    --background-color: #f5f7fa;
+    --card-bg-color: #ffffff;
+    --text-color: #333333;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --gradient-start: #4a6baf;
+    --gradient-end: #8e44ad;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Rubik', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding: 2rem 0;
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+    color: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px var(--shadow-color);
+}
+
+header h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+header p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+.games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.game-card {
+    background-color: var(--card-bg-color);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px var(--shadow-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+}
+
+.game-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px var(--shadow-color);
+}
+
+.game-icon {
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+    color: white;
+    padding: 2rem;
+    text-align: center;
+}
+
+.game-icon i {
+    font-size: 4rem;
+}
+
+.game-info {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.game-info h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--primary-color);
+}
+
+.game-info p {
+    margin-bottom: 1.5rem;
+    color: #666;
+}
+
+.game-difficulty {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    margin-top: auto;
+}
+
+.game-difficulty span {
+    background-color: #f0f0f0;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.play-button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 30px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-family: 'Rubik', sans-serif;
+    width: 100%;
+    font-size: 1rem;
+}
+
+.play-button:hover {
+    background-color: #3a5999;
+}
+
+footer {
+    text-align: center;
+    padding: 2rem 0;
+    color: #666;
+    border-top: 1px solid #eee;
+}
+
+/* משחק זיכרון - עיצוב משותף */
+.game-container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 2rem;
+}
+
+.game-sidebar {
+    width: 300px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 1rem;
+    height: calc(100vh - 2rem);
+    overflow-y: auto;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px var(--shadow-color);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.game-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.game-title {
+    font-size: 2rem;
+    color: var(--primary-color);
+}
+
+.game-controls {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.difficulty-selector {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.difficulty-btn {
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--primary-color);
+    background: transparent;
+    color: var(--primary-color);
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: 'Rubik', sans-serif;
+    transition: all 0.3s ease;
+}
+
+.difficulty-btn.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.game-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    background-color: white;
+    padding: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px var(--shadow-color);
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.memory-board {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 2rem;
+    width: 100%;
+}
+
+.memory-card {
+    aspect-ratio: 1;
+    background-color: var(--primary-color);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 2rem;
+    color: white;
+    transform-style: preserve-3d;
+    transition: transform 0.5s;
+    box-shadow: 0 3px 10px var(--shadow-color);
+}
+
+.memory-card.flipped {
+    transform: rotateY(180deg);
+}
+
+.memory-card .front,
+.memory-card .back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+}
+
+.memory-card .front {
+    background-color: white;
+    transform: rotateY(180deg);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem;
+}
+
+.card-symbol {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.card-points {
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    background-color: rgba(74, 107, 175, 0.1);
+    padding: 0.2rem 0.5rem;
+    border-radius: 10px;
+}
+
+.memory-card .back {
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+}
+
+.memory-card.matched {
+    background-color: #2ecc71;
+    cursor: default;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.action-btn {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 30px;
+    cursor: pointer;
+    font-family: 'Rubik', sans-serif;
+    transition: background-color 0.3s ease;
+    font-size: 1rem;
+}
+
+.action-btn.restart {
+    background-color: var(--accent-color);
+}
+
+.action-btn.home {
+    background-color: #7f8c8d;
+}
+
+.action-btn:hover {
+    opacity: 0.9;
+}
+
+.game-message {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.game-message.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.message-content {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 15px;
+    text-align: center;
+    max-width: 90%;
+    width: 400px;
+}
+
+.message-title {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.message-text {
+    margin-bottom: 2rem;
+    font-size: 1.2rem;
+}
+
+.message-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+/* שחקנים */
+.players-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    gap: 1rem;
+}
+
+.player {
+    flex: 1;
+    background-color: white;
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: 0 3px 10px var(--shadow-color);
+    text-align: center;
+    border: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.player.active {
+    border-color: var(--primary-color);
+    background-color: rgba(74, 107, 175, 0.1);
+}
+
+.player-name {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.player-score {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+/* פופאפ אישור */
+.confirmation-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.confirmation-popup.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.confirmation-content {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 15px;
+    max-width: 90%;
+    width: 400px;
+    text-align: center;
+}
+
+.confirmation-title {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.confirmation-text {
+    margin-bottom: 1.5rem;
+}
+
+.confirmation-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.confirmation-btn {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 30px;
+    font-family: 'Rubik', sans-serif;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.confirmation-btn.confirm {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.confirmation-btn.cancel {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+/* רספונסיביות */
+@media (max-width: 992px) {
+    .game-container {
+        flex-direction: column;
+    }
+    
+    .game-sidebar {
+        width: 100%;
+        position: static;
+        height: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .games-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .game-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .game-stats {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .memory-board {
+        gap: 5px;
+    }
+    
+    .memory-card {
+        font-size: 1.5rem;
+    }
+}

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>משחק זיכרון קלאסי</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="game-container">
+        <!-- פאנל צידי קבוע -->
+        <div class="game-sidebar">
+            <h1 class="game-title">משחק זיכרון קלאסי</h1>
+            
+            <div class="difficulty-selector">
+                <button class="difficulty-btn active" data-difficulty="easy">קל (4×4)</button>
+                <button class="difficulty-btn" data-difficulty="medium">בינוני (6×6)</button>
+                <button class="difficulty-btn" data-difficulty="hard">מתקדם (8×8)</button>
+            </div>
+            
+            <div class="players-container">
+                <div class="player player-1 active">
+                    <div class="player-name">שחקן 1</div>
+                    <div class="player-score">0 נקודות</div>
+                </div>
+                <div class="player player-2">
+                    <div class="player-name">שחקן 2</div>
+                    <div class="player-score">0 נקודות</div>
+                </div>
+            </div>
+
+            <div class="game-stats">
+                <div class="stat-item">
+                    <div class="stat-value" data-stat="moves">0</div>
+                    <div class="stat-label">מהלכים</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" data-stat="pairs">0/8</div>
+                    <div class="stat-label">זוגות</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" data-stat="time">00:00</div>
+                    <div class="stat-label">זמן</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" data-stat="current-player">שחקן 1</div>
+                    <div class="stat-label">תור</div>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="action-btn restart">התחל מחדש</button>
+                <button class="action-btn home" onclick="location.href='index.html'">חזרה לדף הבית</button>
+            </div>
+        </div>
+        
+        <!-- תוכן המשחק -->
+        <div class="game-content">
+            <div class="memory-board" id="memory-board"></div>
+        </div>
+    </div>
+
+    <!-- הודעת סיום משחק -->
+    <div class="game-message" id="game-message">
+        <div class="message-content">
+            <h2 class="message-title">המשחק הסתיים!</h2>
+            <p class="message-text">המנצח: שחקן 1 עם 0 נקודות</p>
+            <div class="message-buttons">
+                <button class="action-btn play-again message-btn">שחק שוב</button>
+                <button class="action-btn go-home message-btn">חזרה לדף הבית</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- פופאפ אישור שינוי רמת קושי -->
+    <div class="confirmation-popup" id="difficulty-confirmation">
+        <div class="confirmation-content">
+            <h3 class="confirmation-title">שינוי רמת קושי</h3>
+            <p class="confirmation-text">שינוי רמת הקושי יאפס את המשחק הנוכחי. האם להמשיך?</p>
+            <div class="confirmation-buttons">
+                <button class="confirmation-btn confirm" id="confirm-difficulty-change">כן, המשך</button>
+                <button class="confirmation-btn cancel" id="cancel-difficulty-change">ביטול</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/utils/BaseMemoryGame.js"></script>
+    <script src="assets/js/games/game1.js"></script>
+</body>
+</html>
