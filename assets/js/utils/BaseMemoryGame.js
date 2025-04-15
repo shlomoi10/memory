@@ -123,6 +123,10 @@ class BaseMemoryGame {
         this.startTime = null;
         this.gameActive = true;
         
+        // הגדרת גודל הלוח לפי רמת הקושי
+        const size = this.boardSize[this.difficulty];
+        this.boardElement.setAttribute('data-size', size);
+        
         this.initializeBoard();
         this.updateStats();
     }

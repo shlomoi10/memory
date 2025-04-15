@@ -248,6 +248,21 @@ footer {
     gap: 10px;
     margin-bottom: 2rem;
     width: 100%;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.memory-board[data-size="4"] {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.memory-board[data-size="6"] {
+    grid-template-columns: repeat(6, 1fr);
+}
+
+.memory-board[data-size="8"] {
+    grid-template-columns: repeat(8, 1fr);
 }
 
 .memory-card {
@@ -258,11 +273,31 @@ footer {
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    font-size: 2rem;
     color: white;
     transform-style: preserve-3d;
     transition: transform 0.5s;
     box-shadow: 0 3px 10px var(--shadow-color);
+    max-width: 120px;
+    max-height: 120px;
+    width: 100%;
+    height: 100%;
+    min-width: 60px;
+    min-height: 60px;
+}
+
+.memory-board[data-size="4"] .memory-card {
+    max-width: 120px;
+    max-height: 120px;
+}
+
+.memory-board[data-size="6"] .memory-card {
+    max-width: 100px;
+    max-height: 100px;
+}
+
+.memory-board[data-size="8"] .memory-card {
+    max-width: 80px;
+    max-height: 80px;
 }
 
 .memory-card.flipped {
@@ -389,6 +424,29 @@ footer {
     display: flex;
     gap: 1rem;
     justify-content: center;
+}
+
+.game-info-box {
+    background-color: rgba(74, 107, 175, 0.1);
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.game-info-box h3 {
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.game-info-box ul {
+    padding-right: 1.5rem;
+    margin: 0;
+}
+
+.game-info-box li {
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
 }
 
 /* שחקנים */
