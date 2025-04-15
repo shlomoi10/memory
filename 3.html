@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>זיכרון מספרים</title>
+    <title>זיכרון משולש</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,7 +14,7 @@
     <div class="game-container">
         <!-- פאנל צידי קבוע -->
         <div class="game-sidebar">
-            <h1 class="game-title">זיכרון מספרים</h1>
+            <h1 class="game-title">זיכרון משולש</h1>
             
             <div class="difficulty-selector">
                 <button class="difficulty-btn active" data-difficulty="easy">קל (4×4)</button>
@@ -56,9 +56,10 @@
                 <h3>חוקי המשחק</h3>
                 <ul>
                     <li>מצא זוגות של קלפים זהים</li>
-                    <li>כל ניסיון שגוי צובר נקודות (סכום הקלפים)</li>
-                    <li>ניסיון מוצלח לא צובר נקודות</li>
-                    <li>המטרה: לצבור כמה שפחות נקודות</li>
+                    <li>אחרי מציאת זוג, נחש היכן הקלף השלישי</li>
+                    <li>ניחוש נכון = נקודה נוספת</li>
+                    <li>ניחוש שגוי = איבוד התור</li>
+                    <li>המטרה: לצבור כמה שיותר נקודות</li>
                 </ul>
             </div>
             
@@ -97,8 +98,22 @@
             </div>
         </div>
     </div>
+    
+    <!-- פופאפ ניחוש הקלף השלישי -->
+    <div class="popup-overlay" id="third-card-popup">
+        <div class="popup-content">
+            <h3 class="popup-title">מצא את הקלף השלישי</h3>
+            <p class="popup-text">נחש היכן נמצא הקלף השלישי שתואם לזוג שמצאת</p>
+            
+            <div class="popup-board" id="popup-board"></div>
+            
+            <div class="popup-footer">
+                <p class="popup-hint">לחץ על אחד הקלפים כדי לנחש</p>
+            </div>
+        </div>
+    </div>
 
     <script src="assets/js/utils/BaseMemory.js"></script>
-    <script src="assets/js/variants/2.js"></script>
+    <script src="assets/js/variants/3.js"></script>
 </body>
 </html>
