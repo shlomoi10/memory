@@ -131,7 +131,18 @@ class ClassicMemoryGame extends BaseMemoryGame {
             this.updatePlayerScore(currentPlayer);
             
             // סימון הקלפים כמתאימים
-            this.markAsMatched();
+            this.flippedCards.forEach(card => {
+                card.classList.add('matched');
+                card.style.pointerEvents = 'none';
+            });
+            this.matchedPairs++;
+            this.flippedCards = [];
+            
+            // עדכון סטטיסטיקות
+            this.updateStats();
+            
+            // בדיקה האם המשחק הסתיים
+            this.checkGameCompletion();
             
             // השחקן הנוכחי ממשיך לשחק (לא מחליפים תור)
             this.turnChanged = false;

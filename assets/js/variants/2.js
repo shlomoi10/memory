@@ -38,7 +38,7 @@ class NumberMemoryGame extends BaseMemoryGame {
             { number: 23, emoji: '👽', points: 23 },
             { number: 24, emoji: '👾', points: 24 },
             { number: 25, emoji: '🤖', points: 25 },
-            { number: 26, emoji: '💩', points: 26 },
+            { number: 26, emoji: '😡', points: 26 },
             { number: 27, emoji: '👶', points: 27 },
             { number: 28, emoji: '🧒', points: 28 },
             { number: 29, emoji: '👦', points: 29 },
@@ -94,14 +94,14 @@ class NumberMemoryGame extends BaseMemoryGame {
             this.boardElement.appendChild(card);
             this.cards.push(card);
             
-            // הוספת המספר והאימוג'י לצד הקדמי של הקלף
+            // הוספת האימוג'י והניקוד לצד הקדמי של הקלף
             const frontSide = card.querySelector('.front');
             const cardData = cardValues[i];
             
-            // יצירת מבנה הקלף עם מספר ואימוג'י
+            // יצירת מבנה הקלף עם אימוג'י וניקוד
             frontSide.innerHTML = `
-                <div class="card-number">${cardData.number}</div>
-                <div class="card-emoji">${cardData.emoji}</div>
+                <div class="card-symbol">${cardData.emoji}</div>
+                <div class="card-points">${cardData.points}</div>
             `;
         }
         
@@ -128,7 +128,18 @@ class NumberMemoryGame extends BaseMemoryGame {
             // התאמה נמצאה - אין תוספת ניקוד
             
             // סימון הקלפים כמתאימים
-            this.markAsMatched();
+            this.flippedCards.forEach(card => {
+                card.classList.add('matched');
+                card.style.pointerEvents = 'none';
+            });
+            this.matchedPairs++;
+            this.flippedCards = [];
+            
+            // עדכון סטטיסטיקות
+            this.updateStats();
+            
+            // בדיקה האם המשחק הסתיים
+            this.checkGameCompletion();
             
             // השחקן הנוכחי ממשיך לשחק (לא מחליפים תור)
             this.turnChanged = false;

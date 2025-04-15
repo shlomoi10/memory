@@ -191,7 +191,7 @@ class TripleMemoryGame extends BaseMemoryGame {
             // הצגת פופאפ לניחוש הקלף השלישי אחרי השהייה קצרה
             setTimeout(() => {
                 this.showThirdCardPopup();
-            }, 1000);
+            }, 300);
             
             // השחקן הנוכחי ממשיך לשחק (לא מחליפים תור)
             this.turnChanged = false;
@@ -251,6 +251,9 @@ class TripleMemoryGame extends BaseMemoryGame {
         const gridSize = Math.ceil(Math.sqrt(this.popupUniqueGroups.length));
         this.popupBoard.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
         
+        // משתנה לסימון האם כבר נלחץ קלף בפופאפ
+        this.popupCardClicked = false;
+        
         // יצירת קלפים בפופאפ (אחד מכל קבוצה)
         for (let i = 0; i < this.popupUniqueGroups.length; i++) {
             const cardData = this.popupUniqueGroups[i];
@@ -262,7 +265,16 @@ class TripleMemoryGame extends BaseMemoryGame {
             card.dataset.group = cardData.group;
             
             // הוספת מאזין אירועים לניחוש
-            card.addEventListener('click', () => this.guessThirdCard(card));
+            card.addEventListener('click', () => {
+                // בדיקה האם כבר נלחץ קלף בפופאפ
+                if (this.popupCardClicked) return;
+                
+                // סימון שנלחץ קלף
+                this.popupCardClicked = true;
+                
+                // ניחוש הקלף
+                this.guessThirdCard(card);
+            });
             
             // הוספת צדדים לקלף
             const front = document.createElement('div');
@@ -345,7 +357,7 @@ class TripleMemoryGame extends BaseMemoryGame {
                 // בדיקה האם המשחק הסתיים
                 this.checkGameCompletion();
             }
-        }, 1500); // השהייה של 1.5 שניות כדי לאפשר לשחקן לראות את התוצאה
+        }, 1000); // השהייה של 1 שניות כדי לאפשר לשחקן לראות את התוצאה
     }
     
     /**
@@ -358,6 +370,9 @@ class TripleMemoryGame extends BaseMemoryGame {
         const popupContent = this.popupOverlay.querySelector('.popup-content');
         const existingResult = popupContent.querySelector('.popup-result');
         if (existingResult) popupContent.removeChild(existingResult);
+        
+        // איפוס משתנה הלחיצה על קלף בפופאפ
+        this.popupCardClicked = false;
         
         // בדיקה האם המשחק הסתיים
         this.checkGameCompletion();

@@ -51,8 +51,16 @@ class BaseMemoryGame {
             });
         }
         
+        // כפתור חזרה לדף הבית
+        const homeButton = document.querySelector('.home-btn');
+        if (homeButton) {
+            homeButton.addEventListener('click', () => {
+                window.location.href = 'index.html';
+            });
+        }
+        
         // כפתור אישור בפופאפ
-        const confirmButton = document.querySelector('.confirm-btn');
+        const confirmButton = document.getElementById('confirm-difficulty-change');
         if (confirmButton) {
             confirmButton.addEventListener('click', () => {
                 this.confirmDifficultyChange();
@@ -60,10 +68,26 @@ class BaseMemoryGame {
         }
         
         // כפתור ביטול בפופאפ
-        const cancelButton = document.querySelector('.cancel-btn');
+        const cancelButton = document.getElementById('cancel-difficulty-change');
         if (cancelButton) {
             cancelButton.addEventListener('click', () => {
                 this.cancelDifficultyChange();
+            });
+        }
+        
+        // כפתורי הודעת סיום משחק
+        const playAgainButton = document.querySelector('.play-again');
+        if (playAgainButton) {
+            playAgainButton.addEventListener('click', () => {
+                this.resetGame();
+                this.hideCompletionMessage();
+            });
+        }
+        
+        const goHomeButton = document.querySelector('.go-home');
+        if (goHomeButton) {
+            goHomeButton.addEventListener('click', () => {
+                window.location.href = 'index.html';
             });
         }
     }
@@ -89,7 +113,7 @@ class BaseMemoryGame {
      * הצגת פופאפ אישור לשינוי רמת קושי
      */
     showConfirmationPopup() {
-        const popup = document.querySelector('.confirmation-popup');
+        const popup = document.getElementById('difficulty-confirmation');
         if (popup) {
             popup.classList.add('visible');
         }
@@ -99,7 +123,7 @@ class BaseMemoryGame {
      * הסתרת פופאפ אישור
      */
     hideConfirmationPopup() {
-        const popup = document.querySelector('.confirmation-popup');
+        const popup = document.getElementById('difficulty-confirmation');
         if (popup) {
             popup.classList.remove('visible');
         }
@@ -312,6 +336,13 @@ class BaseMemoryGame {
         const movesElement = document.querySelector('.stat-value[data-stat="moves"]');
         if (movesElement) {
             movesElement.textContent = this.moves;
+        }
+        
+        // עדכון מספר זוגות
+        const pairsElement = document.querySelector('.stat-value[data-stat="pairs"]');
+        if (pairsElement) {
+            const totalPairs = this.cards.length / 2;
+            pairsElement.textContent = `${this.matchedPairs}/${totalPairs}`;
         }
     }
     
