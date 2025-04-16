@@ -1,0 +1,48 @@
+/* הגדרת פונטים מקומיים */
+@font-face {
+    font-family: 'Heebo';
+    src: url('../fonts/Heebo/static/Heebo-Regular.ttf') format('truetype'),
+         url('../fonts/Heebo-Regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Heebo';
+    src: url('../fonts/Heebo/static/Heebo-Bold.ttf') format('truetype'),
+         url('../fonts/Heebo-Bold.woff2') format('woff2');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Heebo';
+    src: url('../fonts/Heebo/static/Heebo-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Fredoka';
+    src: url('../fonts/Fredoka/static/Fredoka-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Fredoka';
+    src: url('../fonts/Fredoka/static/Fredoka-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* הגדרת משתני פונט */
+:root {
+    --font-family: 'Heebo', 'Fredoka', 'Segoe UI', Arial, sans-serif;
+    --font-family-headings: 'Fredoka', 'Heebo', 'Segoe UI', Arial, sans-serif;
+}

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>משחק זיכרון - גרסה 2</title>
+    <title>משחק זיכרון קטגוריות</title>
     <link rel="stylesheet" href="assets/css/fonts.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -12,7 +12,7 @@
     <div class="game-container">
         <!-- פאנל צידי קבוע -->
         <div class="game-sidebar">
-            <h1 class="game-title">זיכרון מספרים</h1>
+            <h1 class="game-title">משחק זיכרון קטגוריות</h1>
             
             <div class="difficulty-selector">
                 <button class="difficulty-btn active" data-difficulty="easy">קל (4×4)</button>
@@ -50,16 +50,6 @@
                 </div>
             </div>
             
-            <div class="game-info-box">
-                <h3>חוקי המשחק</h3>
-                <ul>
-                    <li>מצא זוגות של קלפים זהים</li>
-                    <li>כל ניסיון שגוי צובר נקודות (סכום הקלפים)</li>
-                    <li>ניסיון מוצלח לא צובר נקודות</li>
-                    <li>המטרה: לצבור כמה שפחות נקודות</li>
-                </ul>
-            </div>
-            
             <div class="action-buttons">
                 <button class="action-btn reset-btn">התחל מחדש</button>
                 <button class="action-btn home-btn">חזרה לדף הבית</button>
@@ -95,8 +85,18 @@
             </div>
         </div>
     </div>
+    
+    <!-- פופאפ ניחוש קטגוריה -->
+    <div class="popup-overlay" id="category-popup">
+        <div class="popup-content">
+            <h3 class="popup-title">נחש את הקטגוריה המתאימה</h3>
+            <p class="popup-text">בחר את הקטגוריה המתאימה לזוג שמצאת</p>
+            <div class="popup-board" id="category-popup-board"></div>
+        </div>
+    </div>
 
     <script src="assets/js/utils/BaseMemory.js"></script>
-    <script src="assets/js/variants/2.js"></script>
+    <script src="assets/js/utils/EmojiHelper.js"></script>
+    <script src="assets/js/variants/4.js"></script>
 </body>
 </html>
