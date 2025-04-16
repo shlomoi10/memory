@@ -584,6 +584,8 @@ class CategoryMemoryGame extends BaseMemoryGame {
             this.addPoint(1);
         } else {
             resultDiv.textContent = `טעות! הקטגוריה הנכונה היא ${correctCategory}`;
+            // סימון שיש להפוך את הקלפים בחזרה
+            this.turnChanged = true;
         }
         
         popupContent.appendChild(resultDiv);
@@ -641,15 +643,22 @@ class CategoryMemoryGame extends BaseMemoryGame {
             setTimeout(() => {
                 this.closePopup();
                 
-                // סימון הקלפים כמתאימים
-                this.markCardsAsMatched();
+                if (isCorrect) {
+                    // סימון הקלפים כמתאימים רק אם הניחוש היה נכון
+                    this.markCardsAsMatched();
+                } else {
+                    // אם הניחוש שגוי, הפיכת הקלפים בחזרה
+                    this.resetTempMatchedCards();
+                }
                 
                 // בדיקה האם המשחק הסתיים
                 if (this.matchedPairs === this.totalPairs) {
                     this.endGame();
                 } else {
-                    // מעבר לשחקן הבא
-                    this.switchPlayer();
+                    // מעבר לשחקן הבא אם הניחוש היה שגוי
+                    if (!isCorrect) {
+                        this.switchPlayer();
+                    }
                 }
             }, 2000);
         }, 1000);
@@ -672,6 +681,26 @@ class CategoryMemoryGame extends BaseMemoryGame {
             card.style.pointerEvents = 'none';
         });
         this.matchedPairs++;
+        this.tempMatchedCards = [];
+    }
+    
+    /**
+     * הפיכת קלפים זמניים בחזרה (במקרה של ניחוש שגוי)
+     */
+    resetTempMatchedCards() {
+        console.log("מפעיל resetTempMatchedCards - הפיכת קלפים בחזרה");
+        this.tempMatchedCards.forEach(card => {
+            // הפיכת הקלף בחזרה
+            card.classList.remove('flipped');
+            card.style.pointerEvents = 'auto';
+            
+            // הסרת האנימציה של הקלף המתאים
+            setTimeout(() => {
+                card.classList.remove('temp-match');
+            }, 300);
+        });
+        
+        // איפוס מערך הקלפים הזמניים
         this.tempMatchedCards = [];
     }
     
